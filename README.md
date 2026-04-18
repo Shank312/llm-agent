@@ -3,128 +3,176 @@
   A modular, extensible AI agent system for building autonomous workflows using LLMs, tools, and memory.
 
 
-  🚀 Why This Project Matters
+🚀 Overview
 
-Most LLM apps are just wrappers around APIs.
+This project implements a production-style AI agent architecture that simulates how real-world intelligent systems operate.
 
-This project goes beyond that by implementing:
+Unlike basic LLM wrappers, this system includes:
 
-  Autonomous decision loops
-  Tool usage (search, file ops, APIs)
-  Memory persistence (vector DB)
-  Configurable workflows
+  🧠 Reasoning loop (planner + executor)
+  🛠 Tool usage (search, calculator, file ops)
+  💾 Persistent memory (vector database)
+  🔌 Modular architecture for extensibility
 
-👉 Designed to simulate real-world AI agents used in production systems
+👉 Designed to reflect industry-grade AI system design
 
 
-🏗️ Architecture
-User Query
+🎯 Key Features
+   ✅ Multi-step reasoning agent loop
+   ✅ Tool execution system (search, calculator, etc.)
+   ✅ Long-term memory using vector embeddings (FAISS)
+   ✅ Modular architecture (agent, tools, memory, LLM abstraction)
+   ✅ Configurable workflows
+   ✅ Structured logging system
+
+
+ 🏗️ Architecture
+ 
+ User Query
    ↓
-Agent Core (Reasoning Engine)
+Memory Retrieval (Vector DB)
    ↓
-Tool Router ───→ Search / Calculator / FileReader
+Planner (LLM decides next action)
    ↓
-Memory Layer (Vector DB)
+Executor (runs tools)
+   ↓
+Memory Storage (persist knowledge)
    ↓
 Final Response
-
-
-⚙️ Features
-
-✔ Multi-LLM Support (OpenAI, Anthropic, HuggingFace, Ollama)
-✔ Tool Integration (Search, Calculator, File I/O)
-✔ Memory System (short + long term)
-✔ Modular Agent Design
-✔ Config-driven workflows
-✔ Plugin system (extensible tools)
 
 
 📂 Project Structure
 
 llm-agent/
-│── src/
-│   ├── agent_core/      # Core reasoning engine
-│   ├── tools/           # External tools
-│   ├── memory/          # Vector DB memory
-│   ├── workflows/       # Agent workflows
-│   └── main.py          # Entry point
 │
-│── configs/
-│   └── agent_config.yaml
+├── src/
+│   ├── agent/
+│   │   ├── core.py          # Agent loop
+│   │   ├── planner.py       # Decision making
+│   │   ├── executor.py      # Tool execution
+│   │
+│   ├── memory/
+│   │   ├── base.py
+│   │   ├── vector_store.py  # FAISS memory
+│   │
+│   ├── tools/
+│   │   ├── search.py
+│   │   ├── calculator.py
+│   │
+│   ├── llm/
+│   │   ├── provider.py      # LLM abstraction
+│   │
+│   ├── utils/
+│   │   ├── logger.py
+│   │
+│   └── main.py
 │
-│── tests/
-│── logs/
-│── README.md
-│── requirements.txt
+├── logs/
+├── tests/
+├── README.md
+├── requirements.txt
 
 
-⚡ Quick Start
-
+⚙️ Installation
+1️⃣ Clone the repository
 git clone https://github.com/Shank312/llm-agent.git
 cd llm-agent
 
+2️⃣ Create virtual environment
 python -m venv venv
-source venv/bin/activate   # Linux/macOS
-venv\Scripts\activate      # Windows
 
+Activate:
+Windows:
+venv\Scripts\activate
+
+Linux/macOS:
+source venv/bin/activate
+
+3️⃣ Install dependencies:
 pip install -r requirements.txt
 
-
-▶️ Run the Agent
+▶️ Running the Agent:
 python src/main.py
 
+🧪 Example Usage:
+from src.agent.core import LLMAgent
+from src.memory.vector_store import VectorMemory
+from src.llm.provider import OpenAIProvider
 
-🧪 Example Usage
+memory = VectorMemory()
 
-from src.agent_core import LLMAgent
-
-agent = LLMAgent(model="gpt-4", memory=True)
-
-response = agent.run(
-    "Summarize key ideas from Designing Data-Intensive Applications"
+agent = LLMAgent(
+    llm=OpenAIProvider(api_key="YOUR_API_KEY"),
+    memory=memory,
+    tools=[]
 )
 
+response = agent.run("Explain machine learning simply")
 print(response)
 
 
-🧰 Tools Supported
+🧠 Memory System
 
-| Tool          | Description               |
-| ------------- | ------------------------- |
-| 🔍 Search     | Web search via API        |
-| 🧮 Calculator | Safe math execution       |
-| 📂 FileReader | Reads JSON/Text files     |
-| 🧠 Memory     | Vector DB context storage |
+This agent includes a persistent memory layer:
 
+🔹 Short-Term Memory
+Maintains current session context
+🔹 Long-Term Memory
+   Uses FAISS vector database
+   Stores past queries and responses
+   Retrieves relevant context dynamically
 
-📊 Example Capabilities
-Answer questions with context
-Use tools dynamically
-Maintain conversation memory
-Execute multi-step reasoning
+👉 Enables context-aware and evolving AI behavior
 
 
-🛠️ Tech Stack
-Python
-OpenAI / Anthropic APIs
-LangChain (optional integration)
-Vector DB (FAISS / Chroma)
+🛠️ Tools System
+
+The agent supports extensible tools:
+| Tool          | Description            |
+| ------------- | ---------------------- |
+| 🔍 Search     | Web search integration |
+| 🧮 Calculator | Math operations        |
+| 📂 FileReader | Read files             |
 
 
-🗺️ Roadmap
- LangGraph / CrewAI integration
- Tool routing optimization
- Local LLM support (Llama 3 / Mistral)
+🔌 LLM Support
+
+Abstracted LLM layer allows easy switching:
+
+OpenAI (GPT)
+Anthropic (Claude)
+Local models (Ollama, Llama)
+
+
+📊 Capabilities:
+Multi-step reasoning
+Tool-based problem solving
+Context-aware responses
+Memory-augmented intelligence
+Extensible agent workflows
+
+
+🗺️ Roadmap:
+ RAG pipeline (documents, PDFs)
+ Async execution (high scalability)
+ Streaming responses
+ LangGraph integration
  Web dashboard for logs
  Docker deployment
 
 
- 🤝 Contributing
+ ⚠️ Limitations:
+Planner uses simple prompt-based reasoning (can be improved)
+No streaming support yet
+Limited tool ecosystem (extensible)
+
+
+🤝 Contributing
 
 Contributions are welcome!
 
 git checkout -b feature-name
-git commit -m "Add new feature"
+git commit -m "Add feature"
 git push origin feature-name
 
 
@@ -136,4 +184,4 @@ MIT License
 👨‍💻 Author
 
 Shankar Kumar
-AI Engineer | Backend Developer | Open Source Contributor
+AI Engineer | Backend Developer
