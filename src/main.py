@@ -1,25 +1,35 @@
 
 
-from src.agent.core import LLMAgent
-from src.llm.provider import OpenAIProvider
 from src.memory.vector_store import VectorMemory
-from src.tools.search import SearchTool
-from src.tools.calculator import CalculatorTool
+from src.llm.provider import OpenAIProvider
+
+from src.rag.retriever import Retriever
+from src.rag.generator import RAGGenerator
+from src.rag.pipeline import RAGPipeline
+from src.rag.ingest import ingest_documents
 
 
-llm = OpenAIProvider(api_key="YOUR_KEY")
-
+# Initialize
 memory = VectorMemory()
+llm = OpenAIProvider(api_key="YOUR_API_KEY")
 
-tools = [
-    SearchTool(),
-    CalculatorTool()
+# 🔥 Add documents (simulate knowledge base)
+documents = [
+    "Machine learning is a field of AI that focuses on learning from data.",
+    "Neural networks are inspired by the human brain.",
+    "Deep learning is a subset of machine learning using neural networks."
 ]
 
-agent = LLMAgent(
-    llm=llm,
-    memory=memory,
-    tools=tools
-)
+ingest_documents(memory, documents)
 
-print(agent.run("What is machine learning?"))
+# Build RAG
+retriever = Retriever(memory)
+generator = RAGGenerator(llm)
+rag = RAGPipeline(retriever, generator)
+
+# Run
+query = "What is deep learning?"
+response = rag.run(query)
+
+print("\n=== RAG RESPONSE ===")
+print(response)
