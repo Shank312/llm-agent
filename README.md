@@ -1,182 +1,195 @@
-🧠 LLM Agent Framework (Production-Ready)
+# 🧠 LLM Agent Framework (Production-Ready)
 
-  A modular, extensible AI agent system for building autonomous workflows using LLMs, tools, and memory.
+🚀 **Built by a Full Stack AI Engineer**
 
+A modular, production-style AI agent system with:
 
-🚀 Overview
+- 🔁 Multi-step reasoning (Planner + Executor)
+- 🧰 Tool execution system
+- 🧠 Long-term memory (FAISS vector DB)
+- 📚 Retrieval-Augmented Generation (RAG)
+- ⚙️ Extensible architecture for real-world AI systems
 
-This project implements a production-style AI agent architecture that simulates how real-world intelligent systems operate.
+---
 
-Unlike basic LLM wrappers, this system includes:
+## 🚀 Overview
 
-  🧠 Reasoning loop (planner + executor)
-  🛠 Tool usage (search, calculator, file ops)
-  💾 Persistent memory (vector database)
-  🔌 Modular architecture for extensibility
+This project simulates how **real-world AI systems (like ChatGPT, Copilot, AutoGPT)** are designed internally.
 
-👉 Designed to reflect industry-grade AI system design
+It is **not just an LLM wrapper**, but a complete system with:
 
+- Planning
+- Tool usage
+- Memory
+- Knowledge retrieval (RAG)
 
-🎯 Key Features
-   ✅ Multi-step reasoning agent loop
-   ✅ Tool execution system (search, calculator, etc.)
-   ✅ Long-term memory using vector embeddings (FAISS)
-   ✅ Modular architecture (agent, tools, memory, LLM abstraction)
-   ✅ Configurable workflows
-   ✅ Structured logging system
+💡 Built with a **full-stack AI engineering mindset** — backend architecture + intelligent systems design.
 
+---
 
- 🏗️ Architecture
- 
- User Query
-   ↓
+## 🏗 System Architecture
+
+User Query
+↓
 Memory Retrieval (Vector DB)
-   ↓
-Planner (LLM decides next action)
-   ↓
-Executor (runs tools)
-   ↓
-Memory Storage (persist knowledge)
-   ↓
+↓
+Planner (LLM decides next step)
+↓
+Executor (Tools / RAG / Logic)
+↓
+Memory Storage
+↓
 Final Response
 
 
-📂 Project Structure
+---
 
-llm-agent/
-│
-├── src/
-│   ├── agent/
-│   │   ├── core.py          # Agent loop
-│   │   ├── planner.py       # Decision making
-│   │   ├── executor.py      # Tool execution
-│   │
-│   ├── memory/
-│   │   ├── base.py
-│   │   ├── vector_store.py  # FAISS memory
-│   │
-│   ├── tools/
-│   │   ├── search.py
-│   │   ├── calculator.py
-│   │
-│   ├── llm/
-│   │   ├── provider.py      # LLM abstraction
-│   │
-│   ├── utils/
-│   │   ├── logger.py
-│   │
-│   └── main.py
-│
-├── logs/
-├── tests/
-├── README.md
-├── requirements.txt
+## 📚 RAG Pipeline (Major Upgrade 🚀)
 
+This project now includes a **complete RAG system**:
 
-⚙️ Installation
-1️⃣ Clone the repository
-git clone https://github.com/Shank312/llm-agent.git
-cd llm-agent
+### Components
 
-2️⃣ Create virtual environment
-python -m venv venv
+- 🔍 **Retriever** → Fetches relevant knowledge
+- 🧠 **Generator** → LLM generates contextual answer
+- 🔗 **Pipeline** → Connects retrieval + generation
+- 📥 **Ingestion** → Adds documents to vector memory
 
-Activate:
-Windows:
-venv\Scripts\activate
+### Example
 
-Linux/macOS:
-source venv/bin/activate
-
-3️⃣ Install dependencies:
-pip install -r requirements.txt
-
-▶️ Running the Agent:
-python src/main.py
-
-🧪 Example Usage:
-from src.agent.core import LLMAgent
+```python
 from src.memory.vector_store import VectorMemory
 from src.llm.provider import OpenAIProvider
 
-memory = VectorMemory()
+from src.rag.retriever import Retriever
+from src.rag.generator import RAGGenerator
+from src.rag.pipeline import RAGPipeline
+from src.rag.ingest import ingest_documents
 
-agent = LLMAgent(
-    llm=OpenAIProvider(api_key="YOUR_API_KEY"),
-    memory=memory,
-    tools=[]
+memory = VectorMemory()
+llm = OpenAIProvider(api_key="YOUR_API_KEY")
+
+documents = [
+    "Machine learning learns from data.",
+    "Deep learning uses neural networks."
+]
+
+ingest_documents(memory, documents)
+
+rag = RAGPipeline(
+    retriever=Retriever(memory),
+    generator=RAGGenerator(llm)
 )
 
-response = agent.run("Explain machine learning simply")
+response = rag.run("What is deep learning?")
 print(response)
 
-
 🧠 Memory System
+🔹 Short-term → current session context
+🔹 Long-term → FAISS vector database
+🔹 Stores past queries + responses
+🔹 Enables context-aware reasoning
 
-This agent includes a persistent memory layer:
-
-🔹 Short-Term Memory
-Maintains current session context
-🔹 Long-Term Memory
-   Uses FAISS vector database
-   Stores past queries and responses
-   Retrieves relevant context dynamically
-
-👉 Enables context-aware and evolving AI behavior
-
-
-🛠️ Tools System
-
-The agent supports extensible tools:
+🧰 Tools System
 | Tool          | Description            |
 | ------------- | ---------------------- |
 | 🔍 Search     | Web search integration |
 | 🧮 Calculator | Math operations        |
 | 📂 FileReader | Read files             |
 
+🔌 LLM Layer (Abstracted)
 
-🔌 LLM Support
-
-Abstracted LLM layer allows easy switching:
+Supports multiple providers:
 
 OpenAI (GPT)
 Anthropic (Claude)
-Local models (Ollama, Llama)
+Local models (Ollama / LLaMA)
+
+👉 Easily switch models without changing core logic
 
 
-📊 Capabilities:
-Multi-step reasoning
-Tool-based problem solving
-Context-aware responses
+📂 Project Structure
+llm-agent/
+│── src/
+│   ├── agent/
+│   │   ├── core.py        # Agent loop
+│   │   ├── planner.py     # Decision logic
+│   │   ├── executor.py    # Tool execution
+│
+│   ├── memory/
+│   │   ├── base.py
+│   │   ├── vector_store.py   # FAISS
+│
+│   ├── rag/
+│   │   ├── retriever.py
+│   │   ├── generator.py
+│   │   ├── pipeline.py
+│   │   ├── ingest.py
+│
+│   ├── llm/
+│   │   ├── provider.py
+│
+│   ├── tools.py
+│   ├── main.py
+│   ├── run_agent.py
+│
+│── tests/
+│── logs/
+│── README.md
+
+
+⚙️ Installation
+git clone https://github.com/Shank312/llm-agent.git
+cd llm-agent
+
+python -m venv venv
+
+
+Activate
+
+Windows:
+venv\Scripts\activate
+
+Linux/macOS:
+source venv/bin/activate
+
+Install
+pip install -r requirements.txt
+
+▶️ Run
+python src/main.py
+
+
+⚡ Capabilities
+Multi-step reasoning agent
+Tool-based execution
 Memory-augmented intelligence
-Extensible agent workflows
+Retrieval-augmented generation (RAG)
+Modular and extensible architecture
 
 
-🗺️ Roadmap:
- RAG pipeline (documents, PDFs)
- Async execution (high scalability)
+🛣 Roadmap
+ PDF ingestion (real documents)
+ Async agent execution
  Streaming responses
- LangGraph integration
- Web dashboard for logs
+ FastAPI backend (API layer)
+ Web dashboard (logs + memory visualization)
  Docker deployment
 
 
- ⚠️ Limitations:
-Planner uses simple prompt-based reasoning (can be improved)
+⚠️ Limitations
+Planner uses prompt-based reasoning (can be improved)
 No streaming support yet
-Limited tool ecosystem (extensible)
+Tool ecosystem is minimal (extensible)
 
 
-🤝 Contributing
-
-Contributions are welcome!
-
+🤝 Contributing:
 git checkout -b feature-name
-git commit -m "Add feature"
+git commit -m "feat: add feature"
 git push origin feature-name
 
 
-📜 License
+📄 License
 
 MIT License
 
@@ -184,4 +197,5 @@ MIT License
 👨‍💻 Author
 
 Shankar Kumar
-AI Engineer | Backend Developer
+🚀 Full Stack AI Engineer
+💻 Backend Systems | 🤖 AI/ML | ⚙️ Scalable Architectures
